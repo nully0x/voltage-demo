@@ -28,6 +28,16 @@ const getInfo = async () => {
     }
 }
 
+const createWallet = async () => {
+    try {
+        let res = await myNode.post('/v1/create')
+        return res
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+
 const payInvoice = async (invoice) => {
     try {
       let res = await myNode.post('/v2/router/send', {
@@ -52,7 +62,6 @@ const payInvoice = async (invoice) => {
     }
   }
 
-
 app.get('/get-info', async (req, res) => {
     let info = await getInfo()
     res.send(info.data)
@@ -70,7 +79,15 @@ app.post('/create-invoice', async (req, res) => {
     res.send(invoice.data)
 })
 
-
+app.post('/create-wallet', async (req, res) => {
+  try {
+    let wallet = await createWallet()
+    res.json(wallet)
+  } catch (error) {
+    res.send(error)
+  }
+   
+})
 
 
 app.listen(3000, () => console.log('Listening on port 3000!'));
